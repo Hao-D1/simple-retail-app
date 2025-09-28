@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: retailer-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: retailer
+  template:
+    metadata:
+      labels:
+        app: retailer
+    spec:
+      containers:
+      - name: retailer
+        image: dthao/retail-app:v0.1
+        ports:
+        - containerPort: 3000
+        volumeMounts:
+        - name: sqlite-storage
+          mountPath: /app/store.db
+          subPath: store.db
+      volumes:
+      - name: sqlite-storage
+        persistentVolumeClaim:
+          claimName: sqlite-pvc
